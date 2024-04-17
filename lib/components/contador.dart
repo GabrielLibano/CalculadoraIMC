@@ -2,19 +2,22 @@ import '../constants.dart';
 import 'package:flutter/material.dart';
 
 class Contador extends StatelessWidget {
-  const Contador({super.key});
+  final String titulo;
+  final void Function(int) counter;
+  final int contador;
+  const Contador({super.key, required this.titulo, required this.counter, required this.contador});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          '?',
+        Text(
+          titulo,
           style: labelTextStyle,
         ),
-        const Text(
-          '80',
+        Text(
+          contador.toString(),
           style: numberTextStyle,
         ),
         Row(
@@ -33,7 +36,11 @@ class Contador extends StatelessWidget {
               width: 10.0,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                (int value) {
+                  counter(value);
+                };
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: activeCardColour,
                 shape: const CircleBorder(),

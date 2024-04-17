@@ -16,6 +16,10 @@ class CalculadoraPage extends StatefulWidget {
 }
 
 class _CalculadoraPageState extends State<CalculadoraPage> {
+  bool masc = false;
+  bool fem = false;
+  int altura = 120;
+  int idade = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,26 +27,42 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
         title: const Text('Calculadora IMC'),
         centerTitle: true,
       ),
-      body: const Column(
+      body: Column(
         children: [
           Expanded(
             child: Row(
               children: [
                 Expanded(
-                  child: CustomCard(
-                    active: false,
-                    child: GenderContent(
-                      icon: Icons.male,
-                      label: 'Masculino',
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        masc = true;
+                        fem = false;
+                      });
+                    },
+                    child: CustomCard(
+                      active: masc,
+                      child: GenderContent(
+                        icon: Icons.male,
+                        label: 'Masculino',
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
-                  child: CustomCard(
-                    active: true,
-                    child: GenderContent(
-                      icon: Icons.female,
-                      label: 'Feminino',
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        masc = false;
+                        fem = true;
+                      });
+                    },
+                    child: CustomCard(
+                      active: fem,
+                      child: GenderContent(
+                        icon: Icons.female,
+                        label: 'Feminino',
+                      ),
                     ),
                   ),
                 ),
@@ -50,20 +70,42 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
             ),
           ),
           Expanded(
-            child: CustomCard(),
+            child: CustomCard(
+              child: SliderAltura(altura: altura.toDouble(),
+                onChanged: (double novaAltura) {
+                  setState(() {
+                    altura = novaAltura.toInt();
+                  });
+                },
+              ),
+            ),
           ),
           Expanded(
             child: Row(
               children: [
                 Expanded(
-                  child: CustomCard(),
+                  child: CustomCard(
+                    child: Contador(titulo: 'Idade',
+                    counter: (int novaIdade){
+                      setState(() {
+                        print(novaIdade);
+                        print(idade);
+                      });
+                    }
+                    ),
+                  ),
                 ),
                 Expanded(
-                  child: CustomCard(),
+                  child: CustomCard(
+                    child: Contador(titulo: 'Peso', counter: (int idade){
+                      print(idade);
+                    }),
+                  ),
                 ),
               ],
             ),
           ),
+          BottomButton(buttonTitle: 'Calcular IMC')
         ],
       ),
     );
