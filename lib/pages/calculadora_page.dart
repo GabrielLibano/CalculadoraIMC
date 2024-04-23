@@ -1,3 +1,5 @@
+import 'package:calculadora_imc/calculadora.dart';
+
 import '../components/bottom_button.dart';
 import '../components/contador.dart';
 import '../components/custom_card.dart';
@@ -19,7 +21,8 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
   bool masc = false;
   bool fem = false;
   int altura = 120;
-  int idade = 0;
+  int idade = 18;
+  int peso = 80;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +74,8 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
           ),
           Expanded(
             child: CustomCard(
-              child: SliderAltura(altura: altura.toDouble(),
+              child: SliderAltura(
+                altura: altura.toDouble(),
                 onChanged: (double novaAltura) {
                   setState(() {
                     altura = novaAltura.toInt();
@@ -85,27 +89,55 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
               children: [
                 Expanded(
                   child: CustomCard(
-                    child: Contador(titulo: 'Idade',
-                    counter: (int novaIdade){
+                      child: Contador(
+                    label: 'Peso',
+                    value: peso,
+                    onIncrement: () {
                       setState(() {
-                        print(novaIdade);
-                        print(idade);
+                        peso++;
                       });
-                    }
-                    ),
-                  ),
+                    },
+                    onDecrement: () {
+                      setState(() {
+                        peso--;
+                      });
+                    },
+                  )),
                 ),
                 Expanded(
                   child: CustomCard(
-                    child: Contador(titulo: 'Peso', counter: (int idade){
-                      print(idade);
-                    }),
-                  ),
+                      child: Contador(
+                    label: 'Idade',
+                    value: idade,
+                    onIncrement: () {
+                      setState(() {
+                        idade++;
+                      });
+                    },
+                    onDecrement: () {
+                      setState(() {
+                        idade--;
+                      });
+                    },
+                  )),
                 ),
               ],
             ),
           ),
-          BottomButton(buttonTitle: 'Calcular IMC')
+          BottomButton(
+            buttonTitle: 'Calcular IMC',
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  final imc =
+                      Calculadora.calcularIMC(peso: peso, altura: altura);
+                  final resultado = Calculadora.obterResultado(imc);
+                  return ModalResult(imc: imc, resultado: resultado);
+                },
+              );
+            },
+          )
         ],
       ),
     );
